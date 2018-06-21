@@ -1,3 +1,6 @@
+package com.boyen.personal;
+
+import com.boyen.personal.ClassGenerator;
 import com.squareup.javapoet.JavaFile;
 import com.squareup.javapoet.MethodSpec;
 import java.io.File;
@@ -10,6 +13,10 @@ public class Generator {
   public static void main(String[] args) throws IOException {
     String baseName = args[0];
     String srcDirectory = args[1];
+    generateFiles(baseName,srcDirectory);
+  }
+
+  public static void generateFiles(String baseName, String srcDirectory) throws IOException {
     JavaFile model = ClassGenerator.generateValueClass(baseName + "Model", "com.tvh.mysite.rest.models");
     JavaFile dto = ClassGenerator.generateValueClass(baseName + "Dto", "com.tvh.mysite.business.dtos");
     JavaFile entity = ClassGenerator.generateEntityClass(baseName, "com.tvh.mysite.dbaccess.entities");
@@ -25,7 +32,7 @@ public class Generator {
     JavaFile repository =
         ClassGenerator.generateRepository(baseName + "Repository", "com.tvh.mysite.dbaccess.repositories", entity);
 
-    Stream.of(model, dto, entity, modelMapper, entityMapper,repository)
+    Stream.of(model, dto, entity, modelMapper, entityMapper, repository)
         .forEach(javaFile -> {
           try {
             javaFile.writeTo(new File(srcDirectory));
