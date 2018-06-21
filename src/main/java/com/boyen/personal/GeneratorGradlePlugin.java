@@ -13,10 +13,14 @@ public class GeneratorGradlePlugin implements Plugin<Project> {
             project.getProperties().get("generatorBaseName").toString()
         )
         .orElseThrow(IllegalArgumentException::new);
+
+    GeneratorConfiguration configuration = project.getExtensions().create("generator", GeneratorConfiguration.class);
+
+
     project.task("generateFiles")
         .doLast(task -> {
           try {
-            Generator.generateFiles(baseName, srcDirectory);
+            Generator.generateFiles(baseName, srcDirectory, configuration);
           } catch (IOException e) {
             e.printStackTrace();
           }

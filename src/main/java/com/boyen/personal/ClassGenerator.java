@@ -101,7 +101,8 @@ public class ClassGenerator {
     return javaFile;
   }
 
-  public static JavaFile generateRepository(String name, String packageName, JavaFile entityClass) throws IOException {
+  public static JavaFile generateRepository(String name, String packageName, JavaFile entityClass,
+      List<ClassName> additionalSuperInterfaces) throws IOException {
     ParameterizedTypeName parameterizedTypeName = ParameterizedTypeName.get(
         ClassName.bestGuess("org.springframework.data.jpa.repository.JpaRepository"),
         getClassName(entityClass),
@@ -112,7 +113,7 @@ public class ClassGenerator {
         .addModifiers(Modifier.PUBLIC)
         .addAnnotation(ClassName.bestGuess("org.springframework.stereotype.Repository"))
         .addSuperinterface(parameterizedTypeName)
-        .addSuperinterface(ClassName.bestGuess("com.tvh.mysite.dbaccess.querydsl.AdvancedQueryDslPredicateExecutor"))
+        .addSuperinterfaces(additionalSuperInterfaces)
         .build();
 
     JavaFile javaFile = JavaFile
